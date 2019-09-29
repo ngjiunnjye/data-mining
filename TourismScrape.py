@@ -13,7 +13,7 @@ def download():
     time.sleep(10)
     driver.find_element_by_xpath('//*[@id="gwt-Export"]/button/span').click()
     driver.find_element_by_xpath('/html/body/div[6]/div/div/button[1]').click()
-
+    time.sleep(15)
 
 def archive():
     listing = glob.glob('C:/Users/wqd180009/Downloads/Tourist*')

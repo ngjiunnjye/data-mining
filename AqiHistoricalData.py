@@ -45,10 +45,20 @@ def download2016(driver):
     archive('jasipu2016.xlsx')
 
 def archive(filename):
-    print("Moving download file {} to data archive".format(filename))
-    filepath = "{}\\Downloads\\{}".format(os.path.expanduser('~'), filename)
-    shutil.move(filepath, "./data")
+    archive(filename,0)
 
+def archive(filename, retry):
+    if (retry>3):
+        print("Maximum Retry {} Reached To archive file {}".format(retry, filename))
+    else:
+        try:
+            print("Moving download file {} to data archive".format(filename))
+            filepath = "{}\\Downloads\\{}".format(os.path.expanduser('~'), filename)
+            shutil.move(filepath, "./data")
+        except FileNotFoundError as e:
+            print("File {} Not Found Yet. Retry {}".format(filename, retry + 1))
+            time.sleep(60)
+            archive(filename, retry+1)
 
 driver = initDriver()
 download20052013(driver)
