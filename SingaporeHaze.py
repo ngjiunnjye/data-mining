@@ -59,7 +59,7 @@ def main():
         records.extend(parseHazeJson(getAqi(dateStr)))
         d = d + timedelta(days=1)
 
-    write("data/SingaporeHaze_{}-{}.csv".format(d.strftime("%Y-%m-%d"),today.strftime("%Y-%m-%d")), records)
+    write("data/SingaporeHazePm25_{}-{}.csv".format(strDate,today.strftime("%Y-%m-%d")), records)
     print("done")
 
 main()
