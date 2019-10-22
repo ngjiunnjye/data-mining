@@ -48,13 +48,14 @@ def write(fileName, records):
     f.close()
 
 def main():
-    strDate = input("Please input date:")
+    strDate = input("Please input date[default 2016-02-10]:") or "2016-02-10"
     d = datetime.strptime(strDate, '%Y-%m-%d')
     today = datetime.now()
     print("Scrapping data from {} until {}".format(d, today))
 
     while d.__le__(today):
         dateStr = getDate(d)
+        print("Processing {}".format(dateStr))
         records = parseHazeJson(getAqi(dateStr))
         write("data/SingaporeHaze_{}.csv".format(dateStr), records)
         d = d + timedelta(days=1)
