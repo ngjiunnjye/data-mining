@@ -52,14 +52,14 @@ def main():
     d = datetime.strptime(strDate, '%Y-%m-%d')
     today = datetime.now()
     print("Scrapping data from {} until {}".format(d, today))
-
+    records = []
     while d.__le__(today):
         dateStr = getDate(d)
         print("Processing {}".format(dateStr))
-        records = parseHazeJson(getAqi(dateStr))
-        write("data/SingaporeHaze_{}.csv".format(dateStr), records)
+        records.extend(parseHazeJson(getAqi(dateStr)))
         d = d + timedelta(days=1)
 
+    write("data/SingaporeHaze_{}-{}.csv".format(d.strftime("%Y-%m-%d"),today.strftime("%Y-%m-%d")), records)
     print("done")
 
 main()
