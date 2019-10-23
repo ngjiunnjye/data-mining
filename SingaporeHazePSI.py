@@ -55,7 +55,6 @@ def parseHazeJson(jsonStr, date):
 
 def write(fileName, records):
     f = open(fileName, "a")
-    f.write("timestamp, westPsi, eastPsi, centralPsi, southPsi, northPsi, westPM25, eastPM25, centralPM25, southPM25, northPM25\n")
     for record in records:
         f.write(record.__str__() + "\n")
     f.close()
@@ -65,13 +64,16 @@ def main():
     date = datetime.strptime(strDate, '%Y-%m-%d')
     today = datetime.now()
     print("Scrapping data from {} until {}".format(date, today))
-    records = []
+    fileName = "data/SingaporeHazePSI_{}-{}.csv".format(strDate, today.strftime("%Y-%m-%d"))
+    f = open(fileName, "a")
+    f.write("timestamp, westPsi, eastPsi, centralPsi, southPsi, northPsi, westPM25, eastPM25, centralPM25, southPM25, northPM25\n")
+    f.close()
     while date.__le__(today):
         print("Processing {}".format(date))
-        records.extend(parseHazeJson(getAqi(date),date))
+        records = parseHazeJson(getAqi(date),date)
+        write(fileName, records)
         date = date + timedelta(days=1)
 
-    write("data/SingaporeHazePSI_{}-{}.csv".format(strDate,today.strftime("%Y-%m-%d")), records)
     print("done")
 
 def test():
