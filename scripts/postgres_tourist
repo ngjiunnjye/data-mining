@@ -1,0 +1,132 @@
+select 
+month,
+total_international,
+southeast_asia,
+greater_china,
+north_asia,
+south_asia,
+West_Asia,
+Americas,
+Oceania,
+africa,
+others
+ from singapore_tourist_arrival;
+
+ alter table singapore_tourist_arrival add column  yyyy varchar;
+ 
+ alter table singapore_tourist_arrival add column   mm varchar
+
+select substring(month,5,7), month as year from singapore_tourist_arrival
+
+update singapore_tourist_arrival set mm = substring(month,5,7)
+
+select * from singapore_tourist_arrival;
+
+select
+month, 
+CAST(total_international as float) / total_international_byYear * 100 as percentMonthInternational,
+CAST(southeast_asia as float)/ southeast_asia_byYear * 100 as percentMonthSoutheastasia,
+CAST(greater_china as float)/ greater_china_byYear * 100 as percentMonthgreater_china,
+CAST(north_asia as float)/ north_asia_byYear * 100 as percentMonthnorth_asia,
+CAST(south_asia as float)/ south_asia_byYear * 100 as percentMonthsouth_asia,
+CAST(West_Asia as float)/ West_Asia_byYear * 100 as percentMonthWest_Asia,
+CAST(Americas as float)/ Americas_byYear * 100 as percentMonthAmericasa,
+CAST(Oceania as float)/ Oceania_byYear * 100 as percentMonthOceania,
+CAST(africa as float)/africa_byYear * 100 as percentMonthafrica
+from (
+ select 
+sum(total_international) over (partition by yyyy) total_international_byYear,
+sum(southeast_asia) over (partition by yyyy) southeast_asia_byYear,
+sum(greater_china) over (partition by yyyy) greater_china_byYear,
+sum(north_asia) over (partition by yyyy) north_asia_byyear,
+sum(south_asia) over (partition by yyyy) south_asia_byyear,
+sum(West_Asia) over (partition by yyyy) west_asia_byyear,
+sum(Americas) over (partition by yyyy) americas_byyear,
+sum(Oceania) over (partition by yyyy) oceania_byyear,
+sum(africa) over (partition by yyyy) africa_byyear,
+arrival.*
+ from singapore_tourist_arrival arrival) sumByYear
+ order by month;
+
+
+
+ select 
+month,
+total_international,
+lag(total_international,1) over (order by month) total_international_1,
+southeast_asia,
+lag(southeast_asia,1) over (order by month) southeast_asia_1,
+greater_china,
+lag(greater_china,1) over (order by month) greater_china_1,
+north_asia,
+lag(north_asia,1) over (order by month) north_asia_1,
+south_asia,
+lag(south_asia,1) over (order by month) south_asia_1,
+West_Asia,
+lag(West_Asia,1) over (order by month) West_Asia_1,
+Americas,
+lag(Americas,1) over (order by month) Americas_1,
+Oceania,
+lag(Oceania,1) over (order by month) Oceania_1,
+africa,
+lag(africa,1) over (order by month) africa_1,
+others,
+lag(others,1) over (order by month) others_1
+ from singapore_tourist_arrival order by month desc;
+
+
+select 
+month,
+total_international,
+total_international_1,
+case when total_international > total_international_1 then 'Uptrend' else 'Downtrend' end total_international_trend,
+southeast_asia,
+southeast_asia_1,
+case when southeast_asia > southeast_asia_1 then 'Uptrend' else 'Downtrend' end southeast_asia_trend,
+greater_china,
+greater_china_1,
+case when greater_china > greater_china_1 then 'Uptrend' else 'Downtrend' end greater_china_trend,
+north_asia,
+north_asia_1,
+case when north_asia > north_asia_1 then 'Uptrend' else 'Downtrend' end north_asia_trend,
+south_asia,
+south_asia_1,
+case when south_asia > south_asia_1 then 'Uptrend' else 'Downtrend' end south_asia_trend,
+West_Asia,
+West_Asia_1,
+case when West_Asia > West_Asia_1 then 'Uptrend' else 'Downtrend' end West_Asia_trend,
+Americas,
+Americas_1,
+case when Americas > Americas_1 then 'Uptrend' else 'Downtrend' end Americas_trend,
+Oceania,
+Oceania_1,
+case when Oceania > Oceania_1 then 'Uptrend' else 'Downtrend' end Oceania_trend,
+africa,
+africa_1,
+case when africa > africa_1 then 'Uptrend' else 'Downtrend' end africa_trend,
+others,
+others_1,
+case when others > others_1 then 'Uptrend' else 'Downtrend' end others_trend
+from (  select 
+month,
+total_international,
+lag(total_international,1) over (order by month) total_international_1,
+southeast_asia,
+lag(southeast_asia,1) over (order by month) southeast_asia_1,
+greater_china,
+lag(greater_china,1) over (order by month) greater_china_1,
+north_asia,
+lag(north_asia,1) over (order by month) north_asia_1,
+south_asia,
+lag(south_asia,1) over (order by month) south_asia_1,
+West_Asia,
+lag(West_Asia,1) over (order by month) West_Asia_1,
+Americas,
+lag(Americas,1) over (order by month) Americas_1,
+Oceania,
+lag(Oceania,1) over (order by month) Oceania_1,
+africa,
+lag(africa,1) over (order by month) africa_1,
+others,
+lag(others,1) over (order by month) others_1
+ from singapore_tourist_arrival order by month desc) tourist_lag;
